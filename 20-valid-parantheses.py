@@ -17,12 +17,3 @@ class Solution:
             elif c != stack.pop():
                 return False
         return len(stack) == 0
-
-
-s = Solution()
-print(s.isValid("()"))
-print(s.isValid("()[]{}"))
-print(s.isValid("(]"))
-print(s.isValid("([])"))
-print(s.isValid("([)]"))
-
