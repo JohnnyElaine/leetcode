@@ -3,36 +3,34 @@ class Solution:
     def isValidSudoku(self, board: List[List[str]]) -> bool:
         ZERO = ord('0')
 
-        SUB_BOX_WIDTH = 3
-        SUB_BOX_HEIGHT = 3
+        GRID_SIZE = 9
+        BOX_SIZE = 3
+        NUM_POSSIBLE_VALUES_PER_CELL = 10
 
-        num_rows = 9
-        num_cols = 9
+        cols = [[False] * NUM_POSSIBLE_VALUES_PER_CELL for _ in range(GRID_SIZE)]
+        boxes = [[False] * NUM_POSSIBLE_VALUES_PER_CELL for _ in range(GRID_SIZE)]
 
-        # no list for rows needed, since we can clear the set each iteration of the outer for loop thats looping through the rows
-        rows = [[False] * 10 for _ in range(num_rows)]
-        cols = [[False] * 10 for _ in range(num_cols)]
-        boxes = [[False] * 10 for _ in range(num_cols)]
-
-        for row in range(num_rows):
-            for col in range(num_cols):
-                elem = board[row][col]
+        for row_i in range(GRID_SIZE):
+            # doesnt need to be pre-allocated for every row --> we can just reset it every loop iteration
+            # this is somehow cheaper in python, since we avoid the dreaded 2D array access
+            row = [False] * NUM_POSSIBLE_VALUES_PER_CELL
+            for col_i in range(GRID_SIZE):
+                elem = board[row_i][col_i]
                 if elem == '.':
                     continue
 
                 # convert elem to int, so we can use it as index in primitive set (i.e. an array)
                 idx = ord(elem) - ZERO
 
-                box_idx = row // SUB_BOX_HEIGHT * SUB_BOX_WIDTH + col // SUB_BOX_WIDTH
+                # flatten boxes 2D -> 1D
+                box_idx = row_i // BOX_SIZE * BOX_SIZE + col_i // BOX_SIZE
 
-                # check if value is unique in this row
-                # check if value is unique in this column
-                # check if value is uniqe in this sub box
-                if rows[row][idx] or cols[col][idx] or boxes[box_idx][idx]:
+                # check if value is unique in this row/col/box
+                if row[idx] or cols[col_i][idx] or boxes[box_idx][idx]:
                     return False
 
-                rows[row][idx] = True
-                cols[col][idx] = True
+                row[idx] = True
+                cols[col_i][idx] = True
                 boxes[box_idx][idx] = True
 
         return True
@@ -42,25 +40,25 @@ class Solution:
 s = Solution()
 
 board = [["5","3",".",".","7",".",".",".","."]
-,["6",".",".","1","9","5",".",".","."]
-,[".","9","8",".",".",".",".","6","."]
+,["6",".",".","1","GRID_SIZE","5",".",".","."]
+,[".","GRID_SIZE","8",".",".",".",".","6","."]
 ,["8",".",".",".","6",".",".",".","3"]
 ,["4",".",".","8",".","3",".",".","1"]
 ,["7",".",".",".","2",".",".",".","6"]
 ,[".","6",".",".",".",".","2","8","."]
-,[".",".",".","4","1","9",".",".","5"]
-,[".",".",".",".","8",".",".","7","9"]]
+,[".",".",".","4","1","GRID_SIZE",".",".","5"]
+,[".",".",".",".","8",".",".","7","GRID_SIZE"]]
 
 print(s.isValidSudoku(board))
 
 board = [["8","3",".",".","7",".",".",".","."]
-,["6",".",".","1","9","5",".",".","."]
-,[".","9","8",".",".",".",".","6","."]
+,["6",".",".","1","GRID_SIZE","5",".",".","."]
+,[".","GRID_SIZE","8",".",".",".",".","6","."]
 ,["8",".",".",".","6",".",".",".","3"]
 ,["4",".",".","8",".","3",".",".","1"]
 ,["7",".",".",".","2",".",".",".","6"]
 ,[".","6",".",".",".",".","2","8","."]
-,[".",".",".","4","1","9",".",".","5"]
-,[".",".",".",".","8",".",".","7","9"]]
+,[".",".",".","4","1","GRID_SIZE",".",".","5"]
+,[".",".",".",".","8",".",".","7","GRID_SIZE"]]
 
 print(s.isValidSudoku(board))
