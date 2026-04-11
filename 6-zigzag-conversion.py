@@ -22,7 +22,6 @@ class Solution:
             row += row_direction
 
         return "".join(rows)
-        
 
 s = Solution()
 
