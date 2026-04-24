@@ -20,7 +20,7 @@ class Solution:
 
             max_water = max(max_water, water)
 
-            if (height[left] < height[right]):
+            if height[left] < height[right]:
                 left += 1
             else:
                 right -= 1
